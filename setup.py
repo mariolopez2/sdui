@@ -100,7 +100,7 @@ def iniciar_configuracion():
 
 def configurar_archivos():
     os.system("sudo mkdir /home/pi/Sharepoint")
-    os.system("sudo mv -rf /home/pi/New_IoT/html /var/www/html/")
+    os.system("sudo mv -rf /home/pi/sdui/html /var/www/html/")
     print("Hemos terminado, el ultimo paso es necesario sea ejecutado de manera Manual. Por favor ejecute 'rclone config' y siga las instrucciones en el documento.")
 
 
@@ -221,7 +221,7 @@ def mostrar_configuracion():
     sn_corto = sn_completo[10:16]
     os.system("clear")
     print("-------------------------------------------------------")
-    print("         INFORMACION ACTUAL DEL DISPOSITIVO")
+    print("      INFORMACION ACTUAL DEL ARCHIVO CONFIG.INI")
     print(f"Numero de Serie: {sn_corto}")
     print(f"IPV4: {ipv4}")
     print(f"Gateway: {gateway}")
@@ -231,13 +231,14 @@ def mostrar_configuracion():
 
 def instrucciones():
     print("-------------------------------------------------------------------")
-    print("setup.py es un script para configurar el dispositivo para subir fotografias a SharePoint")
+    print("setup.py es un script para configurar la red y el hostname del SDUI")
     print("para ejecutar el script es necesario teclear 'python3 setup.py'")
     print("existen comandos que puedes utilizar - setup.py <comando>")
     print(" - comandos disponibles -")
     print("    -i ó --iniciar       <--- Iniciar el proceso de configuración.")
     print("    -c ó --configuracion <--- Muestra la configuración actual.")
     print("    -h ó --help          <--- Ayuda de como utilizar el script.")
+    print("para mas información, visita https://github.com/mariolopez2/sdui")
     print("-------------------------------------------------------------------")
     
 if __name__ == '__main__':

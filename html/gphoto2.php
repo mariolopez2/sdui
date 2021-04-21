@@ -18,7 +18,6 @@ require_once "ApcApcuCompat.php";
 			error_log($cmd."\r\n", 3, "/var/www/shutterweb/my-errors.log");
 			error_log($cmd."\r\n", 3, "/var/www/shutterweb/logging.log");
 			$results = shell_exec('gphoto2 --quiet '.$cmd);
-			//error_log($results."\r\n", 3, "/var/www/shutterweb/my-errors.log");
 			if($AddBRs)
 				return str_replace("\n", "<br/>\r\n", $results);
 			else if($MakeArray)
@@ -213,7 +212,7 @@ require_once "ApcApcuCompat.php";
 			foreach($cfgs as &$setting) {
 				if($setting->Category == $cat) {
 					if($setting == $this->ShootingMode())
-						array_unshift($_results, $setting); //keep the shooting mode at the start of the array
+						array_unshift($_results, $setting);
 					else 
 						$_results[] = $setting;
 				}
@@ -255,7 +254,6 @@ require_once "ApcApcuCompat.php";
 					$config = $this->Config($name);
 					$opt = $config->GetOption($val);
 					$cmdParams .= ' --set-config-value '.$name.'="'.$opt->Name.'"';
-					//$config->SetCurrent($val);
 				}
 				
 				$result = GPHOTO2::GP2_PortCommand($this->Port, $cmdParams, true, false);
@@ -276,7 +274,7 @@ require_once "ApcApcuCompat.php";
 		public function Capture($saveToCamera, $saveToServer, $saveLocation, $params) {
 			$this->SetValues($params);
 			$imagefile= date('Y-m-d_H_i_s').'.jpg';
-			$cmd = "--capture-image-and-download";//$saveToServer === 'true' ? "--capture-image-and-download" : "--capture-image";
+			$cmd = "--capture-image-and-download";
 			if($saveToCamera === 'false')
 				$cmd .= " --no-keep";
 
@@ -344,18 +342,16 @@ require_once "ApcApcuCompat.php";
 		
 		public function saveFilesInFolder() {
 			$folder=$_SESSION['selectedFolder'];
-		//	echo $folder;
 			$this->loadFoldersAndFiles();
 			$paths=$this->_folders;
 			$paths=reset($paths);
-		//	print_r ($paths);
-		//	die();
 			foreach($paths as $path)
 			{
+				//FOLDER WHERE WILL SAVE THE PICTURES
 				GPHOTO2::GP2_PortCommand($this->Port,'--get-file '.$path->FullPath.' --filename /home/pi/Sharepoint/'.$path->File, false, true);
+				GPHOTO2::GP2_PortCommand($this->Port,'--get-file '.$path->FullPath.' --filename /home/pi/Sharefolder/'.$path->File, false, true);
 				GPHOTO2::GP2_PortCommand($this->Port,'--delete-file '.$path->FullPath, false, true);
 			}
-			//die();
 			$this->loadFoldersAndFiles();
 			
 			if(array_key_exists((string)$folder, $this->_folders))
@@ -373,7 +369,6 @@ require_once "ApcApcuCompat.php";
 		
 		public function getFile($idx) {
 			GPHOTO2::GP2_PortCommand($this->Port,'--get-file '.$idx.' --filename grabbed.jpg', false, true);
-			#GPHOTO2::GP2_PortCommand($this->Port,'--get-thumbnail '.$idx.' --filename thumbnail_'.$idx.'.jpg', false, true);
 			return "grabbed.jpg";
 		}
 	}
@@ -412,30 +407,17 @@ require_once "ApcApcuCompat.php";
 		}
 
 		public function Start($port) {
-			//$cmd = '  -I '.$this->Delay.' -F '.$this->Count.' --capture-image-and-download --keep --filename latest.jpg';
-			//GPHOTO2::GP2_CommandEx($cmd.' --port '.$port.' > /dev/null &', false, false);
-			//$imagefile= date('Y-m-d_H_i_s').'.jpg';
 			$cmd = '  -I '.$this->Delay.' -F '.$this->Count.' --capture-image-and-download';
 			if($this->SaveToCamera === 'false')
 				$cmd .= " --no-keep";
 			if($this->SaveToServer === 'true' && !file_exists($this->SaveLocation."/".$this->Name))
 				mkdir($this->SaveLocation."/".$this->Name, 0777, true);
-			//echo $this->SaveLocation."/".$this->Name;
 			$filename = $this->SaveToServer === 'true' ? $this->SaveLocation."/".$this->Name."/%Y-%m-%d_%H_%M_%S.jpg" : 'latest.jpg';
 			$cmd .= ' --filename '.$filename;
-			
-			//GPHOTO2::GP2_PortCommand($port, $cmd.' --filename latest.jpg', true, false);
 			GPHOTO2::GP2_CommandEx($cmd.' --port '.$port.' > /dev/null &', false, false);
-			
-			//if($this->SaveToServer === 'true') {
-			//	error_log("Saving latest.jpg\r\n", 3, "/var/www/shutterweb/logging.log");
-			//	copy($this->SaveLocation.date('Y-m-d_H_i_s').'.jpg', "latest.jpg");
-			//}
 		}
 		
 		public function Done() {
-			//$fi = new FilesystemIterator($this->SaveLocation, FilesystemIterator::SKIP_DOTS);
-			//$Done = iterator_count($fi);
 			$Done = 0;
 			$files = glob($this->SaveLocation."/".$this->Name."/*");
 			if ($files){
@@ -518,20 +500,15 @@ require_once "ApcApcuCompat.php";
 				}
 				
 			}
-			//$this->_current = $current;
 		}
 
 		protected function Load() {
 			
 			$shootMode = $this->ShootingModeCurrent();
 			
-			//$this->_camera->LogEntries[] = "Loading Camera Settings Options for ".$shootMode." shooting mode [".$this->_label." - ".$this->Setting."]";
-			//$this->_camera->Persist();
-			
 			if(!array_key_exists($shootMode, $this->_options))
 			{
 				$raw = GPHOTO2::GP2_PortCommand($this->_camera->Port, '--get-config '.$this->Setting, false, true);
-				//$this->Raw = $raw;
 				$this->_label = str_replace("Label: ","",$raw[0]);
 				$this->_type = str_replace("Type: ","",$raw[1]);
 				$current = str_replace("Current: ","",$raw[2]);
