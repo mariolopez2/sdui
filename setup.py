@@ -16,9 +16,6 @@ from time import sleep
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-primer_uso = bool(config['DEFAULT']['FIRST_USE'])
-segundo_uso = bool(config['DEFAULT']['SECOND_USE'])
-
 ipv4 = config['DEFAULT']['IPV4']
 gateway = config['DEFAULT']['GATEWAY']
 dns = config['DEFAULT']['DNS']
