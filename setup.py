@@ -19,7 +19,7 @@ config.read('config.ini')
 ipv4 = config['DEFAULT']['IPV4']
 gateway = config['DEFAULT']['GATEWAY']
 dns = config['DEFAULT']['DNS']
-mascara_red = config['DEFAULT']['MASK']
+mascara = config['DEFAULT']['MASK']
 
 def mascara_red(mask):
     if(mask == 8 ):
@@ -254,7 +254,7 @@ def mostrar_configuracion():
     print(f"Numero de Serie: {sn_corto}")
     print(f"IPV4: {ipv4}")
     print(f"Gateway: {gateway}")
-    print(f"Mascara de red: {mascara_red()}")
+    print(f"Mascara de red: {mascara_red(mascara)}")
     print(f"DNS: {dns}")
     print("--------------------------------------------------------")
 
