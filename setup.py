@@ -19,7 +19,7 @@ config.read('config.ini')
 ipv4 = config['DEFAULT']['IPV4']
 gateway = config['DEFAULT']['GATEWAY']
 dns = config['DEFAULT']['DNS']
-mascara = config['DEFAULT']['MASK']
+mascara_red = config['DEFAULT']['MASK']
 
 def mascara_red(mask):
     if(mask == 8 ):
