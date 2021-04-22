@@ -86,20 +86,12 @@ def validar_ipv4(ipv4):
         return False
 
 def iniciar_configuracion():
-    if(primer_uso):
-        os.system("clear")
-        os.system("cat readme.txt")
-        mostrar_configuracion()
-        configurar_dispositivo()
-    else:
-        if(segundo_uso):
-            configurar_archivos()
-            config.set("DEFAULT","SECOND_USE",str(False))
-        else:
-            sys.exit()
+    os.system("clear")
+    mostrar_configuracion()
+    configurar_archivos()
+    configurar_dispositivo()
 
 def configurar_archivos():
-    os.system("sudo mkdir /home/pi/Sharepoint")
     os.system("sudo mv -rf /home/pi/sdui/html /var/www/html/")
     print("Hemos terminado, el ultimo paso es necesario sea ejecutado de manera Manual. Por favor ejecute 'rclone config' y siga las instrucciones en el documento.")
 
@@ -110,7 +102,7 @@ def configurar_dispositivo():
     sn_corto = sn_completo[10:16]
     nuevo_hostname = "GDLIOT" + sn_corto
 
-    print(" POR FAVOR ESTABLEZCA LOS NUEVOS VALORES.")
+    print(" POR FAVOR ESTABLEZCA LOS NUEVOS VALORES DE RED.")
     while True:
         nueva_ip = input("Ingrese la nueva IP: ")
         if(validar_ipv4(nueva_ip)):
@@ -139,32 +131,54 @@ def configurar_dispositivo():
             break
         else:
             print(f"La mascara de red: {mascara_red(nueva_mascara)} no es valida, intenta de nuevo por favor.")
+    print(" POR FAVOR ESTABLEZCA LOS DATOS DE SHARE FOLDER")
+    while True:
+        ip_server = input("Ingresa la ip del servidor compartido: ")
+        if(validar_ipv4(ip_server)):
+            print(f"La IP: {ip_server} ha sido guardada.")
+            break
+        else:
+            print(f"La IP: {ip_server} no es valida, por favor ingresa una IP valida.")
+
+    carpeta_compartida = input(f"Por favor escribe el nombre de la carpeta compartida en el servidor {ip_server}")
+    user_share = input(f"Ingresa un usuario con permisos de escritura y lectura en //{ip_server}/{carpeta_compartida} ")
+    password_share = input(f"Ingresa la contraseña del usuario '{user_share}': ")
         
-    print("Revisa la información introducida: ")    
+    print("Revisa la información introducida: ")   
+    print(" -- Informacion de red --") 
     print(f"- IP: {nueva_ip}")
     print(f"- Gateway: {nuevo_gateway}")
     print(f"- Mascara de red: {mascara_red(nueva_mascara)}")
     print(f"- DNS: {nuevo_dns}")
     print(f"- Hostname: {nuevo_hostname}")
+    print(" -------------------------------------------")
+    print(" -- Informacion de Sharefolder --")
+    print(f"- IP del servidor compartido: {ip_server}")
+    print(f"- Nombre de la carpeta compartida: {carpeta_compartida}")
+    print(f"- Ruta completa del sharefolder //{ip_server}/{carpeta_compartida}")
+    print(f"- Usuario (Lectura y Escritura: {user_share}")
+    print(f"- Contraseña: {password_share}")
     while True:
         respuesta = input("¿Deseas aplicar estos cambios? s/n")
         if( respuesta == 's'):
-            aplicar_cambios(nueva_ip,nuevo_gateway,nuevo_dns,nueva_mascara,nuevo_hostname)
-            config.set("DEFAULT","FIRST_USE",str(False))
+            aplicar_cambios(nueva_ip,nuevo_gateway,nuevo_dns,nueva_mascara,nuevo_hostname,ip_server,carpeta_compartida,user_share,password_share)
             config.set("DEFAULT","IPV4",str(nueva_ip))
             config.set("DEFAULT","GATEWAY",str(nuevo_gateway))
             config.set("DEFAULT","DNS",str(nuevo_dns))
             config.set("DEFAULT","MASK",str(nueva_mascara))
             config.set("DEFAULT","HOSTNAME",str(nuevo_hostname))
-            print("Cambios aplicados, el equipo se reiniciará en 10 segundos")
-            sleep(10000)
+            config.set("DEFAULT","IP_SERVER",str(ip_server))
+            config.set("DEFAULT","CARPETA",str(carpeta_compartida))
+            config.set("DEFAULT","USER",str(user_share))
+            print("Cambios aplicados, el equipo se reiniciará en 35 segundos")
+            sleep(35000)
             os.system("sudo shutdown -r now")
             break
         else:
             print("No se han hecho cambios. Programa finalizado.")
             break
 
-def aplicar_cambios(ip,gateway,dns,mascara,hostname):
+def aplicar_cambios(ip,gateway,dns,mascara,hostname,ip_server,carpeta_compartida,usuario_share,password_share):
     # Cambiar datos de red
     file_name = '/etc/dhcpcd.conf'
     with open(file_name, 'r') as f:
@@ -213,7 +227,25 @@ def aplicar_cambios(ip,gateway,dns,mascara,hostname):
 
         with open('temp.txt', 'w') as file:
             file.writelines(data)
-        os.system('sudo mv temp.txt /etc/hostname')   
+        os.system('sudo mv temp.txt /etc/hostname')
+
+    # Modificar fstab file
+    with open('/etc/fstab','r') as file:
+        data = file.readlines()
+        data[5] =   f"//{ip_server}/{carpeta_compartida} /home/pi/Sharefolder cifs credentials=/root.smbcred,domain={ip_server},vers=2.1,noserverino,defaults,users,_netdev,auto 0 0"
+        with open('temp.txt','w') as file:
+            file.writelines(data)
+        os.system('sudo mv temp.txt /etc/fstab')
+
+    # Crear smbcred - Archivo de credenciales
+    with open('cred.txt','w') as file:
+        newlines = [
+            'username=' + usuario_share + '\n',
+            'password=' + password_share + '\n'
+        ]
+        file.writelines(newlines)
+        os.system('sudo mv cred.txt /root/.smbcred')
+        os.system('sudo chmod 400 /root/.smbcred')
 
 def mostrar_configuracion():
     comando = "cat /proc/cpuinfo | grep -w Serial | awk '{print $3}'"
