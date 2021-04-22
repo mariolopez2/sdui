@@ -89,7 +89,7 @@ def iniciar_configuracion():
     configurar_dispositivo()
 
 def configurar_archivos():
-    os.system("sudo mv -rf /home/pi/sdui/html /var/www/html/")
+    os.system("sudo mv -f /home/pi/sdui/html /var/www/html/")
     print("Hemos terminado, el ultimo paso es necesario sea ejecutado de manera Manual. Por favor ejecute 'rclone config' y siga las instrucciones en el documento.")
 
 
