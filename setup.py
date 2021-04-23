@@ -91,7 +91,7 @@ def iniciar_configuracion():
 
 def configurar_archivos():
     os.system("sudo rm -rf /var/www/")
-    os.system("sudo mkdir /var/www/html")
+    os.system("sudo mkdir /var/www/html/")
     os.system("sudo cp -r /home/pi/sdui/html/ /var/www/html/")
 
 
