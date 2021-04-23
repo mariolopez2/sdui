@@ -177,7 +177,7 @@ def configurar_dispositivo():
 
 def aplicar_cambios(ip,gateway,dns,mascara,hostname,ip_server,carpeta_compartida,usuario_share,password_share):
     # Cambiar datos de red
-    file_name = '/etc/dhcpcd.conf'
+    """file_name = '/etc/dhcpcd.conf'
     with open(file_name, 'r') as f:
         file_text = f.read()
 
@@ -224,7 +224,7 @@ def aplicar_cambios(ip,gateway,dns,mascara,hostname,ip_server,carpeta_compartida
 
         with open('temp.txt', 'w') as file:
             file.writelines(data)
-        os.system('sudo mv temp.txt /etc/hostname')
+        os.system('sudo mv temp.txt /etc/hostname')"""
 
     # Modificar fstab file
     with open('/etc/fstab','r') as file:
