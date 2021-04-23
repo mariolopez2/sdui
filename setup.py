@@ -87,7 +87,6 @@ def iniciar_configuracion():
     mostrar_configuracion()
     configurar_archivos()
     configurar_dispositivo()
-    print("Hemos terminado, el ultimo paso es necesario sea ejecutado de manera Manual. Por favor ejecute 'rclone config' y siga las instrucciones en el documento.")
 
 def configurar_archivos():
     os.system("sudo cp -r /home/pi/sdui/html/ /var/www/")
@@ -168,6 +167,7 @@ def configurar_dispositivo():
             config.set("DEFAULT","CARPETA",str(carpeta_compartida))
             config.set("DEFAULT","USER",str(user_share))
             print("Cambios aplicados, el equipo se reiniciará en 35 segundos")
+            print("Hemos terminado, el ultimo paso es necesario sea ejecutado de manera Manual. Por favor ejecute 'rclone config' y siga las instrucciones en el documento.")
             sleep(35000)
             os.system("sudo shutdown -r now")
             break
@@ -177,7 +177,7 @@ def configurar_dispositivo():
 
 def aplicar_cambios(ip,gateway,dns,mascara,hostname,ip_server,carpeta_compartida,usuario_share,password_share):
     # Cambiar datos de red
-    """file_name = '/etc/dhcpcd.conf'
+    file_name = '/etc/dhcpcd.conf'
     with open(file_name, 'r') as f:
         file_text = f.read()
 
@@ -224,7 +224,7 @@ def aplicar_cambios(ip,gateway,dns,mascara,hostname,ip_server,carpeta_compartida
 
         with open('temp.txt', 'w') as file:
             file.writelines(data)
-        os.system('sudo mv temp.txt /etc/hostname')"""
+        os.system('sudo mv temp.txt /etc/hostname')
 
     # Modificar fstab file
     with open('/etc/fstab','r') as file:
