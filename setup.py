@@ -90,7 +90,6 @@ def iniciar_configuracion():
     print("Hemos terminado, el ultimo paso es necesario sea ejecutado de manera Manual. Por favor ejecute 'rclone config' y siga las instrucciones en el documento.")
 
 def configurar_archivos():
-    os.system("sudo rm -rf /var/www/")
     os.system("sudo mkdir /var/www/html/")
     os.system("sudo cp -r /home/pi/sdui/html/ /var/www/html/")
 
