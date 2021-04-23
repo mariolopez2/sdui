@@ -229,7 +229,7 @@ def aplicar_cambios(ip,gateway,dns,mascara,hostname,ip_server,carpeta_compartida
     # Modificar fstab file
     with open('/etc/fstab','r') as file:
         data = file.readlines()
-        data[4] =   f"//{ip_server}/{carpeta_compartida} /home/pi/Sharefolder cifs credentials=/root.smbcred,domain={ip_server},vers=2.1,noserverino,defaults,users,_netdev,auto 0 0"
+        data[4] =   f"//{ip_server}/{carpeta_compartida} /home/pi/Sharefolder cifs credentials=/root/.smbcred,domain={ip_server},vers=2.1,noserverino,defaults,users,_netdev,auto 0 0"
         with open('temp.txt','w') as file:
             file.writelines(data)
         os.system('sudo mv temp.txt /etc/fstab')
