@@ -27,7 +27,7 @@ error_reporting(E_ALL);
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>Foxconn IoT - Carga de Fotografias</title>
+		<title>Foxconn SDUI - Carga de Fotografias</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" type="text/css" href="./static/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="./static/bootstrap-theme.min.css">
