@@ -137,8 +137,8 @@ def configurar_dispositivo():
         else:
             print(f"La IP: {ip_server} no es valida, por favor ingresa una IP valida.")
 
-    carpeta_compartida = input(f"Por favor escribe el nombre de la carpeta compartida en el servidor {ip_server}")
-    user_share = input(f"Ingresa un usuario con permisos de escritura y lectura en //{ip_server}/{carpeta_compartida} ")
+    carpeta_compartida = input(f"Por favor escribe el nombre de la carpeta compartida en el servidor {ip_server}: ")
+    user_share = input(f"Ingresa un usuario con permisos de escritura y lectura en //{ip_server}/{carpeta_compartida}: ")
     password_share = input(f"Ingresa la contraseña del usuario '{user_share}': ")
         
     print("Revisa la información introducida: ")   
