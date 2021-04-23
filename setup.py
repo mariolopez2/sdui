@@ -87,11 +87,12 @@ def iniciar_configuracion():
     mostrar_configuracion()
     configurar_archivos()
     configurar_dispositivo()
+    print("Hemos terminado, el ultimo paso es necesario sea ejecutado de manera Manual. Por favor ejecute 'rclone config' y siga las instrucciones en el documento.")
 
 def configurar_archivos():
     os.system("sudo rm -rf /var/www/")
-    os.system("sudo cp -r /home/pi/sdui/html/ /var/www/")
-    print("Hemos terminado, el ultimo paso es necesario sea ejecutado de manera Manual. Por favor ejecute 'rclone config' y siga las instrucciones en el documento.")
+    os.system("sudo mkdir /var/www/html")
+    os.system("sudo cp -r /home/pi/sdui/html/ /var/www/html/")
 
 
 def configurar_dispositivo():
