@@ -156,7 +156,7 @@ def configurar_dispositivo():
     print(f"- Usuario (Lectura y Escritura: {user_share}")
     print(f"- Contraseña: {password_share}")
     while True:
-        respuesta = input("¿Deseas aplicar estos cambios? s/n")
+        respuesta = input("¿Deseas aplicar estos cambios? s/n: ")
         if( respuesta == 's'):
             aplicar_cambios(nueva_ip,nuevo_gateway,nuevo_dns,nueva_mascara,nuevo_hostname,ip_server,carpeta_compartida,user_share,password_share)
             config.set("DEFAULT","IPV4",str(nueva_ip))
@@ -229,7 +229,7 @@ def aplicar_cambios(ip,gateway,dns,mascara,hostname,ip_server,carpeta_compartida
     # Modificar fstab file
     with open('/etc/fstab','r') as file:
         data = file.readlines()
-        data[5] =   f"//{ip_server}/{carpeta_compartida} /home/pi/Sharefolder cifs credentials=/root.smbcred,domain={ip_server},vers=2.1,noserverino,defaults,users,_netdev,auto 0 0"
+        data[4] =   f"//{ip_server}/{carpeta_compartida} /home/pi/Sharefolder cifs credentials=/root.smbcred,domain={ip_server},vers=2.1,noserverino,defaults,users,_netdev,auto 0 0"
         with open('temp.txt','w') as file:
             file.writelines(data)
         os.system('sudo mv temp.txt /etc/fstab')
