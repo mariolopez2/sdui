@@ -198,7 +198,7 @@ def aplicar_cambios(ip,gateway,dns,mascara,hostname,ip_server,carpeta_compartida
                 if re.findall('#', l):
                     continue
                 elif re.findall('inform [0-9.]*', l):
-                    newlines.append('inform ' + ip + '/' + mascara + '\n')
+                    newlines.append('inform ' + ip + '/' + str(mascara) + '\n')
                 elif re.findall('static routers=', l):
                     newlines.append('static routers=' + gateway + '\n')
                 elif re.findall('static domain_name_servers=', l):
