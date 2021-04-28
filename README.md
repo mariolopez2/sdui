@@ -5,9 +5,10 @@ SDUI (Secure Device to Upload Information) is a Python and Web project for assur
 
 ## Preparation
 
-Once upon you downloaded the "imageSDUI.iso" from this repository, you will need to upload it into a MicroSD at least 64 GB. This ISO image contains a workly version of SDUI. To assure all files are updated please execute the next command. (For this, you MUST have an internet connection)
+Once upon you downloaded the "imageSDUI.iso" from this repository, you will need to upload it into a MicroSD at least 64 GB. This ISO image contains a workly version of SDUI. To assure all files are updated please execute the next commands. (For this, you MUST have an internet connection)
 
 ```bash
+cd sdui/
 git pull https://github.com/mariolopez2/sdui
 ```
 
