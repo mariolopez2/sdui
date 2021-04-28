@@ -96,7 +96,7 @@ def configurar_dispositivo():
     comando = "cat /proc/cpuinfo | grep -w Serial | awk '{print $3}'"
     sn_completo = os.popen(comando).read()
     sn_corto = sn_completo[10:16]
-    nuevo_hostname = "GDLIOT" + sn_corto
+    nuevo_hostname = "GDLSDUI" + sn_corto
 
     print(" POR FAVOR ESTABLEZCA LOS NUEVOS VALORES DE RED.")
     while True:
@@ -211,7 +211,7 @@ def aplicar_cambios(ip,gateway,dns,mascara,hostname,ip_server,carpeta_compartida
     # Cambiar Hostname
     with open('/etc/hosts', 'r') as file:
         data = file.readlines()
-        data[5] = '127.0.1.1    ' + nuevo_hostname
+        data[5] = '127.0.1.1    ' + hostname
         with open('temp.txt', 'w') as file:
             file.writelines(data)
 
@@ -220,7 +220,7 @@ def aplicar_cambios(ip,gateway,dns,mascara,hostname,ip_server,carpeta_compartida
         with open('/etc/hostname', 'r') as file:
             data = file.readlines()
 
-        data[0] = newHostname
+        data[0] = hostname
 
         with open('temp.txt', 'w') as file:
             file.writelines(data)
