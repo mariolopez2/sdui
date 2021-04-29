@@ -354,7 +354,7 @@ require_once "ApcApcuCompat.php";
 			}
 			$this->loadFoldersAndFiles();
 			$comando = shell_exec('sh shell/upload_to_Sharepoint.sh');
-			echo “<pre>$comando</pre>”;
+			echo "<pre>$comando</pre>";
 			if(array_key_exists((string)$folder, $this->_folders))
 			{
 				return $this->_folders[(string)$folder];
